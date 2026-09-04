@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Linq;
 using Steamworks.Data;
@@ -2303,7 +2303,7 @@ namespace Steamworks.Data
 	internal struct HTML_NeedsPaint_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PBGRA; // pBGRA const char *
+		internal IntPtr PBGRA; // pBGRA const char * - raw BGRA pixels, NOT a string
 		internal uint UnWide; // unWide uint32
 		internal uint UnTall; // unTall uint32
 		internal uint UnUpdateX; // unUpdateX uint32
@@ -2326,9 +2326,9 @@ namespace Steamworks.Data
 	internal struct HTML_StartRequest_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchURL; // pchURL const char *
-		internal string PchTarget; // pchTarget const char *
-		internal string PchPostData; // pchPostData const char *
+		internal Utf8StringPointer PchURL; // pchURL const char *
+		internal Utf8StringPointer PchTarget; // pchTarget const char *
+		internal Utf8StringPointer PchPostData; // pchPostData const char *
 		[MarshalAs(UnmanagedType.I1)]
 		internal bool BIsRedirect; // bIsRedirect bool
 		
@@ -2355,11 +2355,11 @@ namespace Steamworks.Data
 	internal struct HTML_URLChanged_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchURL; // pchURL const char *
-		internal string PchPostData; // pchPostData const char *
+		internal Utf8StringPointer PchURL; // pchURL const char *
+		internal Utf8StringPointer PchPostData; // pchPostData const char *
 		[MarshalAs(UnmanagedType.I1)]
 		internal bool BIsRedirect; // bIsRedirect bool
-		internal string PchPageTitle; // pchPageTitle const char *
+		internal Utf8StringPointer PchPageTitle; // pchPageTitle const char *
 		[MarshalAs(UnmanagedType.I1)]
 		internal bool BNewNavigation; // bNewNavigation bool
 		
@@ -2374,8 +2374,8 @@ namespace Steamworks.Data
 	internal struct HTML_FinishedRequest_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchURL; // pchURL const char *
-		internal string PchPageTitle; // pchPageTitle const char *
+		internal Utf8StringPointer PchURL; // pchURL const char *
+		internal Utf8StringPointer PchPageTitle; // pchPageTitle const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_FinishedRequest_t) );
@@ -2388,7 +2388,7 @@ namespace Steamworks.Data
 	internal struct HTML_OpenLinkInNewTab_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchURL; // pchURL const char *
+		internal Utf8StringPointer PchURL; // pchURL const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_OpenLinkInNewTab_t) );
@@ -2401,7 +2401,7 @@ namespace Steamworks.Data
 	internal struct HTML_ChangedTitle_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchTitle; // pchTitle const char *
+		internal Utf8StringPointer PchTitle; // pchTitle const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_ChangedTitle_t) );
@@ -2482,7 +2482,7 @@ namespace Steamworks.Data
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
 		internal uint X; // x uint32
 		internal uint Y; // y uint32
-		internal string PchURL; // pchURL const char *
+		internal Utf8StringPointer PchURL; // pchURL const char *
 		[MarshalAs(UnmanagedType.I1)]
 		internal bool BInput; // bInput bool
 		[MarshalAs(UnmanagedType.I1)]
@@ -2499,7 +2499,7 @@ namespace Steamworks.Data
 	internal struct HTML_JSAlert_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchMessage; // pchMessage const char *
+		internal Utf8StringPointer PchMessage; // pchMessage const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_JSAlert_t) );
@@ -2512,7 +2512,7 @@ namespace Steamworks.Data
 	internal struct HTML_JSConfirm_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchMessage; // pchMessage const char *
+		internal Utf8StringPointer PchMessage; // pchMessage const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_JSConfirm_t) );
@@ -2525,8 +2525,8 @@ namespace Steamworks.Data
 	internal struct HTML_FileOpenDialog_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchTitle; // pchTitle const char *
-		internal string PchInitialFile; // pchInitialFile const char *
+		internal Utf8StringPointer PchTitle; // pchTitle const char *
+		internal Utf8StringPointer PchInitialFile; // pchInitialFile const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_FileOpenDialog_t) );
@@ -2539,7 +2539,7 @@ namespace Steamworks.Data
 	internal struct HTML_NewWindow_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchURL; // pchURL const char *
+		internal Utf8StringPointer PchURL; // pchURL const char *
 		internal uint UnX; // unX uint32
 		internal uint UnY; // unY uint32
 		internal uint UnWide; // unWide uint32
@@ -2570,7 +2570,7 @@ namespace Steamworks.Data
 	internal struct HTML_StatusText_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchMsg; // pchMsg const char *
+		internal Utf8StringPointer PchMsg; // pchMsg const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_StatusText_t) );
@@ -2583,7 +2583,7 @@ namespace Steamworks.Data
 	internal struct HTML_ShowToolTip_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchMsg; // pchMsg const char *
+		internal Utf8StringPointer PchMsg; // pchMsg const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_ShowToolTip_t) );
@@ -2596,7 +2596,7 @@ namespace Steamworks.Data
 	internal struct HTML_UpdateToolTip_t : ICallbackData
 	{
 		internal uint UnBrowserHandle; // unBrowserHandle HHTMLBrowser
-		internal string PchMsg; // pchMsg const char *
+		internal Utf8StringPointer PchMsg; // pchMsg const char *
 		
 		#region SteamCallback
 		public static int _datasize = System.Runtime.InteropServices.Marshal.SizeOf( typeof(HTML_UpdateToolTip_t) );

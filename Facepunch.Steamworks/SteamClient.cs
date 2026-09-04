@@ -26,6 +26,7 @@ namespace Steamworks
 			var interfaceVersions = Helpers.BuildVersionString(
 				ISteamApps.Version,
 				ISteamFriends.Version,
+				ISteamHTMLSurface.Version,
 				ISteamInput.Version,
 				ISteamInventory.Version,
 				ISteamMatchmaking.Version,
@@ -64,6 +65,7 @@ namespace Steamworks
 			// Note: don't forget to add the interface version to SteamAPI.Init above!!!
 			AddInterface<SteamApps>();
 			AddInterface<SteamFriends>();
+			AddInterface<SteamHTMLSurface>();
 			AddInterface<SteamInput>();
 			AddInterface<SteamInventory>();
 			AddInterface<SteamMatchmaking>();
