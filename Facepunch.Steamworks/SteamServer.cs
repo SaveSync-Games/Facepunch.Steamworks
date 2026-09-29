@@ -92,6 +92,7 @@ namespace Steamworks
 				ISteamUGC.Version,
 				ISteamApps.Version,
 				ISteamNetworkingUtils.Version,
+				ISteamNetworkingMessages.Version,
 				ISteamNetworkingSockets.Version );
 			var result = SteamInternal.GameServer_Init( ipaddress, init.GamePort, init.QueryPort, secure, init.VersionString, interfaceVersions, out var error );
 			if ( result != SteamAPIInitResult.OK )
@@ -115,6 +116,7 @@ namespace Steamworks
 			AddInterface<SteamApps>();
 
 			AddInterface<SteamNetworkingUtils>();
+			AddInterface<SteamNetworkingMessages>();
 			AddInterface<SteamNetworkingSockets>();
 
 			//

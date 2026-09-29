@@ -33,6 +33,7 @@ namespace Steamworks
 				ISteamMatchmakingServers.Version,
 				ISteamMusic.Version,
 				ISteamNetworking.Version,
+				ISteamNetworkingMessages.Version,
 				ISteamNetworkingSockets.Version,
 				ISteamNetworkingUtils.Version,
 				ISteamParentalSettings.Version,
@@ -72,6 +73,7 @@ namespace Steamworks
 			AddInterface<SteamMatchmakingServers>();
 			AddInterface<SteamMusic>();
 			AddInterface<SteamNetworking>();
+			AddInterface<SteamNetworkingMessages>();
 			AddInterface<SteamNetworkingSockets>();
 			AddInterface<SteamNetworkingUtils>();
 			AddInterface<SteamParental>();

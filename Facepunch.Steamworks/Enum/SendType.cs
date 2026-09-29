@@ -37,6 +37,12 @@ namespace Steamworks.Data
 		/// Reliable message send. Can send up to 0.5mb in a single message. 
 		/// Does fragmentation/re-assembly of messages under the hood, as well as a sliding window for
 		/// efficient sends of large chunks of data.
-		Reliable = 1 << 3
+		Reliable = 1 << 3,
+
+		/// <summary>
+		/// Only meaningful for <see cref="SteamNetworkingMessages"/>. If the session with the peer has
+		/// failed or been closed, start a new one rather than failing the send.
+		/// </summary>
+		AutoRestartBrokenSession = 1 << 5
 	}
 }

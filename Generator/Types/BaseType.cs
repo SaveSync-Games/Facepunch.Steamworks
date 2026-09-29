@@ -108,6 +108,7 @@ internal class BaseType
 
 			if ( Func == "ReadP2PPacket" ) return false;
 			if ( Func == "SendP2PPacket" ) return false;
+			if ( Func == "SendMessageToUser" ) return false;
 			if ( VarName == "pOutMessageNumber" ) return false;
 			if ( VarName == "pOptions" ) return true;
 			if ( VarName == "pLanes" ) return true;
