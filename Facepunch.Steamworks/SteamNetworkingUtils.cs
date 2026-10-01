@@ -129,6 +129,79 @@ namespace Steamworks
 
 		public static long LocalTimestamp => Internal.GetLocalTimestamp();
 
+		/// <summary>
+		/// Codes of every relay data center (POP) in the network config, e.g. "fra".
+		/// Empty until the config has been fetched - see <see cref="InitRelayNetworkAccess"/>.
+		/// </summary>
+		public static string[] GetPopList()
+		{
+			var count = Internal.GetPOPCount();
+			if ( count <= 0 ) return Array.Empty<string>();
+
+			var list = new SteamNetworkingPOPID[count];
+			count = Internal.GetPOPList( ref list[0], list.Length );
+
+			var codes = new List<string>();
+			for ( int i = 0; i < count && i < list.Length; i++ )
+			{
+				var code = PopToString( list[i] );
+				if ( code != null ) codes.Add( code );
+			}
+			return codes.ToArray();
+		}
+
+		/// <summary>
+		/// Ping in ms to a data center, by the best route - which may go through another relay,
+		/// returned in <paramref name="viaRelayPop"/> (null when the route is direct). -1 when there
+		/// is no ping to it yet.
+		/// </summary>
+		public static int GetPingToDataCenter( string pop, out string viaRelayPop )
+		{
+			SteamNetworkingPOPID via = default;
+			var ping = Internal.GetPingToDataCenter( PopFromString( pop ), ref via );
+			viaRelayPop = PopToString( via );
+			return ping;
+		}
+
+		/// <summary>
+		/// Ping in ms straight to a data center, not through any other relay. -1 when there is no
+		/// ping to it yet.
+		/// </summary>
+		public static int GetDirectPingToPop( string pop )
+		{
+			return Internal.GetDirectPingToPOP( PopFromString( pop ) );
+		}
+
+		/// <summary>
+		/// Force relayed traffic through one data center (a code from <see cref="GetPopList"/>), or
+		/// null / empty to let Steam choose.
+		/// </summary>
+		public static bool SetForceRelayCluster( string pop )
+		{
+			return SetConfigString( NetConfig.SDRClient_ForceRelayCluster, pop ?? "" );
+		}
+
+		// Mirrors GetSteamNetworkingLocationPOPStringFromID: three chars in the low 24 bits, and an
+		// optional fourth in the top byte.
+		internal static string PopToString( SteamNetworkingPOPID pop )
+		{
+			uint id = pop;
+			if ( id == 0 ) return null;
+
+			var code = new string( new[] { (char)( ( id >> 16 ) & 0xFF ), (char)( ( id >> 8 ) & 0xFF ), (char)( id & 0xFF ), (char)( id >> 24 ) } );
+			return code.TrimEnd( '\0' );
+		}
+
+		// The reverse, as CalculateSteamNetworkingPOPIDFromString packs it.
+		internal static SteamNetworkingPOPID PopFromString( string pop )
+		{
+			if ( string.IsNullOrEmpty( pop ) || pop.Length < 3 ) return 0;
+
+			uint id = ( (uint)pop[0] << 16 ) | ( (uint)pop[1] << 8 ) | (uint)pop[2];
+			if ( pop.Length > 3 ) id |= (uint)pop[3] << 24;
+			return id;
+		}
+
 
 		/// <summary>
 		/// [0 - 100] - Randomly discard N pct of packets.
@@ -440,7 +513,8 @@ namespace Steamworks
 
 		internal unsafe static bool SetConfigString( NetConfig type, string value )
 		{
-			var bytes = Utility.Utf8NoBom.GetBytes( value );
+			// Steam reads a C string, so it needs the terminator GetBytes doesn't add.
+			var bytes = Utility.Utf8NoBom.GetBytes( value + "\0" );
 
 			fixed ( byte* ptr = bytes )
 			{

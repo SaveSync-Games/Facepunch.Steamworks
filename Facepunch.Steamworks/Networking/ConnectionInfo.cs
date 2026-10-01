@@ -56,22 +56,11 @@ namespace Steamworks.Data
 		/// <summary>
 		/// Code of the relay data center carrying the connection, or null if it isn't relayed.
 		/// </summary>
-		public string RelayPop => PopToString( popRelay );
+		public string RelayPop => SteamNetworkingUtils.PopToString( popRelay );
 
 		/// <summary>
 		/// Code of the data center the remote host is in, or null if we don't know.
 		/// </summary>
-		public string RemotePop => PopToString( popRemote );
-
-		// Mirrors GetSteamNetworkingLocationPOPStringFromID: three chars in the low 24 bits, and an
-		// optional fourth in the top byte.
-		static string PopToString( SteamNetworkingPOPID pop )
-		{
-			uint id = pop;
-			if ( id == 0 ) return null;
-
-			var code = new string( new[] { (char)( ( id >> 16 ) & 0xFF ), (char)( ( id >> 8 ) & 0xFF ), (char)( id & 0xFF ), (char)( id >> 24 ) } );
-			return code.TrimEnd( '\0' );
-		}
+		public string RemotePop => SteamNetworkingUtils.PopToString( popRemote );
 	}
 }
