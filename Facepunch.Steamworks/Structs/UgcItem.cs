@@ -205,6 +205,12 @@ namespace Steamworks.Ugc
 		}
 
 		/// <summary>
+		/// Total size of the item's files as published (excluding the preview), from the query
+		/// details — known before the item is downloaded, unlike <see cref="SizeBytes"/>
+		/// </summary>
+		public long TotalFilesSize => (long) details.TotalFilesSize;
+
+		/// <summary>
 		/// If we're downloading our current progress as a delta betwen 0-1
 		/// </summary>
 		public float DownloadAmount
