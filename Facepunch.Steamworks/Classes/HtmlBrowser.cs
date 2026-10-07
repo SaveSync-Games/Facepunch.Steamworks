@@ -523,8 +523,16 @@ namespace Steamworks
 
 			OnFileOpenDialog?.Invoke( args );
 
-			// Unanswered, the page hangs on the file input forever.
-			Internal.FileLoadDialogResponse( Handle, args.SelectedFile );
+			// Unanswered, the page hangs on the file input forever. Steam takes a null-terminated
+			// array of paths, or null to cancel.
+			if ( args.SelectedFile == null )
+			{
+				Internal.FileLoadDialogResponse( Handle, null );
+				return;
+			}
+
+			using var file = new Utf8StringToNative( args.SelectedFile );
+			Internal.FileLoadDialogResponse( Handle, new[] { file.Pointer, IntPtr.Zero } );
 		}
 
 		internal void InternalOnSetCursor( in HTML_SetCursor_t x ) => OnSetCursor?.Invoke( (HtmlMouseCursor)x.EMouseCursor );

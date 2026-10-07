@@ -26,6 +26,10 @@ internal class BaseType
 		if ( type == "SteamAPICall_t" ) return new SteamApiCallType { NativeType = type, VarName = varname, CallResult = callresult };
 
 		if ( type == "void" ) return new VoidType { NativeType = type, VarName = varname };
+
+		// An array of strings, not a string: the caller builds the null-terminated pointer array.
+		if ( typeNoSpaces == "constchar**" ) return new PointerType { NativeType = type, VarName = varname };
+
 		if ( typeNoSpaces.StartsWith( "constchar*" ) ) return new ConstCharType { NativeType = type, VarName = varname };
 		if ( type == "char *" ) return new FetchStringType { NativeType = type, VarName = varname, BufferSizeParamName = bufferSizeName };
 

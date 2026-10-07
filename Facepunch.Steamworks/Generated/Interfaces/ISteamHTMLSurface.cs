@@ -400,13 +400,12 @@ namespace Steamworks
 		
 		#region FunctionMeta
 		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamHTMLSurface_FileLoadDialogResponse", CallingConvention = Platform.CC)]
-		private static extern void _FileLoadDialogResponse( IntPtr self, HHTMLBrowser unBrowserHandle, IntPtr pchSelectedFiles );
+		private static extern void _FileLoadDialogResponse( IntPtr self, HHTMLBrowser unBrowserHandle, [In,Out] IntPtr[]  pchSelectedFiles );
 		
 		#endregion
-		internal void FileLoadDialogResponse( HHTMLBrowser unBrowserHandle, string pchSelectedFiles )
+		internal void FileLoadDialogResponse( HHTMLBrowser unBrowserHandle, [In,Out] IntPtr[]  pchSelectedFiles )
 		{
-			using var str__pchSelectedFiles = new Utf8StringToNative( pchSelectedFiles );
-			_FileLoadDialogResponse( Self, unBrowserHandle, str__pchSelectedFiles.Pointer );
+			_FileLoadDialogResponse( Self, unBrowserHandle, pchSelectedFiles );
 		}
 		
 	}
